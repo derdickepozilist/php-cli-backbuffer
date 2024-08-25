@@ -51,7 +51,7 @@ class RaytracedBall implements Effect
         $this->yres = $yres;
     }
 
-    public function add_ball(Ball $b): void
+    public function add_ball(Ball &$b): void
     {
         $this->balls[] = $b;
     }
@@ -85,13 +85,15 @@ class RaytracedBall implements Effect
                 $up_offset = - (floatval($row) / $this->yres -1) -0.5;
                 $left_offset = - (floatval($col) / $this->xres -1) -0.5;
 
+                $up_scale = $v2->scaled($up_offset);
+                $left_scale = $v3->scaled($left_offset);
                 $move = clone $v1;
-                $move->add($v2->scaled($up_offset));
-                $move->add($v3->scaled($left_offset));
+                $move->add($up_scale);
+                $move->add($left_scale);
                 $move->normalize();
                 $move->scale(self::RAYSTEP);
 
-                $ray = $this->pos;
+                $ray = clone $this->pos;
 				// trace ray
                 $dists_to_balls = [];
                 for ($i = 0; $i < $ballcount; ++$i) {

@@ -15,7 +15,6 @@ class Direction
         $v->x = cos($this->ang_v) * cos($this->ang_h);
         $v->y = cos($this->ang_v) * sin($this->ang_h);
         $v->z = sin($this->ang_v);
-
         return $v;
     }
 }

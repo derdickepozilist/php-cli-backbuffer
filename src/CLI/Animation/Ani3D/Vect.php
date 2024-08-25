@@ -51,7 +51,7 @@ class Vect
         return $v;
     }
 
-    public function dist(Vect $other): float
+    public function dist(Vect &$other): float
     {
         return sqrt(
             ($this->x - $other->x) * ($this->x - $other->x) +
@@ -69,7 +69,7 @@ class Vect
 
     public function to_direction(): Direction
     {
-        $ang_v = atan($this->z / ($this->x * $this->x + $this->y * $this->y));
+        $ang_v = atan($this->z / (($this->x * $this->x) + ($this->y * $this->y)));
         $ang_h = atan2($this->y, $this->x);
 
         $dir = new Direction();

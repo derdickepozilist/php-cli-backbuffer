@@ -18,7 +18,7 @@ class Ball
         $this->center->scale(-1);
         $incoming->normalize();
 
-        $incoming->scale(-1 * $incoming->dot($move));
+        $incoming->scale(-2 * $incoming->dot($move));
         $new_move = clone $move;
 
         $new_move->add($incoming);
