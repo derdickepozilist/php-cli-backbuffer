@@ -2,13 +2,16 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/cli_backbuffer.php';
-require_once __DIR__ . '/cli_helper.fn.php';
+use CLI\Backbuffer;
+
+use function CLI\clearTerminal;
+
+require_once __DIR__ . '/vendor/autoload.php';
 
 $whole_start = microtime(true);
 
 $start = microtime(true);
-$bb = new CLIBackbuffer(y_rows: 17, prefill_char: '');
+$bb = new Backbuffer(y_rows: 17, prefill_char: '');
 $dur_instance = microtime(true) - $start;
 
 $start = microtime(true);

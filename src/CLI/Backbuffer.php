@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-final class IndexOutOfRangeError extends Exception {}
+namespace CLI;
 
-class CLIBackbuffer
+use InvalidArgumentException;
+
+class Backbuffer
 {
     private array $char_map = [];
 

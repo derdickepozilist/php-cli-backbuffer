@@ -2,17 +2,20 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/cli_animation_effect.php';
-require_once __DIR__ . '/cli_backbuffer.php';
-require_once __DIR__ . '/cli_helper.fn.php';
+namespace CLI\Animation;
 
-class CLIAnimationEngine
+use CLI\Animation\Effect;
+use CLI\Backbuffer;
+
+use function CLI\clearTerminal;
+
+class Engine
 {
     private int $frame = 0;
 
     public function __construct(
-        private CLIBackbuffer &$bb,
-        private readonly CLIAnimationEffect $effect
+        private Backbuffer &$bb,
+        private readonly Effect $effect
     ) {}
 
     public function outputNextFrame(): void

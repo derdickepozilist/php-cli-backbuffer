@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/cli_animation_effect.php';
+namespace Animations;
 
-class CLIAnimationEffectFlame extends CLIAnimationEffect {
+use CLI\Animation\Effect;
+use CLI\Backbuffer;
+
+class Flame implements Effect {
     const FRAME_DELAY_MS = 20;
 
     const CHARS = [
@@ -22,7 +25,7 @@ class CLIAnimationEffectFlame extends CLIAnimationEffect {
     private int $b_count;
     private int $lastline_offset;
 
-    public function __construct(CLIBackbuffer &$bb)
+    public function __construct(Backbuffer &$bb)
     {
         $this->lastline_offset = $bb->x_cols * ($bb->y_rows - 1);
 
@@ -39,7 +42,7 @@ class CLIAnimationEffectFlame extends CLIAnimationEffect {
         $this->b[$i] = 0;
     }
 
-    public function renderNextFrame(int $frame, CLIBackbuffer &$bb): void
+    public function renderNextFrame(int $frame, Backbuffer &$bb): void
     {
         for ($i = 0; $i < $bb->x_cols / 10; $i++) {
             $random_x = random_int($i, $bb->x_cols);

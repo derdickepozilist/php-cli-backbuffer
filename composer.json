@@ -1,0 +1,21 @@
+{
+    "name": "skepsys/php-cli-backbuffer",
+    "description": "A backbuffered cli render engine",
+    "type": "project",
+    "license": "GPLv2",
+    "autoload": {
+        "classmap": ["src"],
+        "files": [
+            "src/CLI/Helper.fn.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Daniel Jürgen"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.3.9"
+    }
+}
