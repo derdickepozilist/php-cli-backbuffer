@@ -8,9 +8,9 @@ use CLI\Animation\Effect;
 use CLI\Backbuffer;
 
 class Flame implements Effect {
-    const FRAME_DELAY_MS = 20;
+    const int FRAME_DELAY_MS = 20;
 
-    const CHARS = [
+    const array CHARS = [
         " ",
         ".",
         ":",

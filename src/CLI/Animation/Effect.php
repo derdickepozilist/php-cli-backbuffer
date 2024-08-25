@@ -7,7 +7,7 @@ namespace CLI\Animation;
 use CLI\Backbuffer;
 
 interface Effect {
-    const FRAME_DELAY_MS = 30;
+    const int FRAME_DELAY_MS = 30;
 
     public function renderNextFrame(int $frame, Backbuffer &$bb): void;
 }
