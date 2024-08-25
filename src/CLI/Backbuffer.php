@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CLI;
 
+use IndexOutOfRangeException;
 use InvalidArgumentException;
 
 class Backbuffer
@@ -45,13 +46,13 @@ class Backbuffer
         if ($x_pos >= 0 && $x_pos < $this->x_cols) {
             $this->x_pos = $x_pos;
         } else {
-            throw new IndexOutOfRangeError('x-pos is out of range: ' . $x_pos);
+            throw new IndexOutOfRangeException('x-pos is out of range: ' . $x_pos);
         }
 
         if ($y_pos >= 0 && $y_pos < $this->y_rows) {
             $this->y_pos = $y_pos;
         } else {
-            throw new IndexOutOfRangeError('y-pos is out of range: ' . $y_pos);
+            throw new IndexOutOfRangeException('y-pos is out of range: ' . $y_pos);
         }
     }
 
