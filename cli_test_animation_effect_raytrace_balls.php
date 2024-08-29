@@ -11,17 +11,16 @@ use CLI\Animation\Engine;
 use CLI\Animation\Object3D\Ball;
 use CLI\Backbuffer;
 
-$bb = new Backbuffer(x_cols: 120, y_rows: 50, prefill_char: ' ');
+$bb = new Backbuffer(x_cols: 120, y_rows: 60, prefill_char: ' ');
 
 // raytraced ball effect initialization
-$start_pos = new Vect(7.5, 7.5, 4.0);
+$start_pos = new Vect(7.5, 7.5, pi());
 $start_dir = new Direction(0.0, -pi()/2);
 $effect = new RaytracedBall($start_pos, $start_dir, 2.0, 2.0, $bb->x_cols, $bb->y_rows);
 
 $effect->add_ball(new Ball(new Vect(5.0, 0.0, 2.0), 1.0));
 $effect->add_ball(new Ball(new Vect(10.0, 0.0, 2.0), 1.0));
 $effect->add_ball(new Ball(new Vect(7.5, 0.0, 2.0), 2.0));
-
 
 $engine = new Engine($bb, $effect);
 $engine->runForever();

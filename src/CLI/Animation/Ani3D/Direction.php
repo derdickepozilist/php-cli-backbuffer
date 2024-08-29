@@ -22,7 +22,6 @@ class Direction
 
     public function to_string(): string
     {
-        $v = $this->to_unit();
-        return '{ alt=' . number_format($this->altitude, 3) . ' azi=' . number_format($this->azimuth, 3) . ' ' . $v->to_string() . ' }';
+        return '{ alt=' . number_format($this->altitude, 3) . ' azi=' . number_format($this->azimuth, 3) . ' ' . $this->to_unit()->to_string() . ' }';
     }
 }

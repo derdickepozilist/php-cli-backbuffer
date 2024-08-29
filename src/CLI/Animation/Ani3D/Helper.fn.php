@@ -20,6 +20,7 @@ function ray_char(Vect &$ray, int $refl): string
     ];
 
     if (ray_done($ray) && abs(intval(floor($ray->x)) - intval(floor($ray->y))) % 2 === 0) {
+        // makes the checkerboard-pattern
         return '#';
     } else if ($refl > 0) {
         if ($refl < 4) return $chars[$refl-1];

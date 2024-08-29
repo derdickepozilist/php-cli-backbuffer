@@ -194,11 +194,9 @@ class RaytracedBall implements Effect
         }
     }
 
-
     public function renderNextFrame(int $frame, Backbuffer &$bb): void
     {
         $this->make_pic($bb);
-
 
         foreach ($this->balls as &$b) {
             $b->bounce_frame();

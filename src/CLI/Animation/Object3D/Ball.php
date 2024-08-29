@@ -40,9 +40,7 @@ class Ball
     {
         $this->center->z += self::BOUNCE_FRAME_STEP * $this->updown;
 
-        if ($this->center->z < $this->zmin) {
-            $this->updown *= -1;
-        } else if ($this->center->z > $this->zmax) {
+        if ($this->center->z < $this->zmin || $this->center->z > $this->zmax) {
             $this->updown *= -1;
         }
     }
