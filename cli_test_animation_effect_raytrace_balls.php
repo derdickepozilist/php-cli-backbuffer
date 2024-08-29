@@ -11,57 +11,17 @@ use CLI\Animation\Engine;
 use CLI\Animation\Object3D\Ball;
 use CLI\Backbuffer;
 
-$bb = new Backbuffer(x_cols: 240, y_rows: 40, prefill_char: ' ');
+$bb = new Backbuffer(x_cols: 200, y_rows: 100, prefill_char: ' ');
 
 // raytraced ball effect initialization
-$start_pos = new Vect;
-$start_pos->x = 0.0;
-$start_pos->y = 0.0;
-$start_pos->z = 1.0;
+$start_pos = new Vect(-5.0, 5.0, 5.0);
+$start_dir = new Direction(-pi()/4, -pi()/4);
+$effect = new RaytracedBall($start_pos, $start_dir, 2.0, 2.0, $bb->x_cols, $bb->y_rows);
 
-$start_dir = new Direction;
-$start_dir->ang_v = -0.2;
-$start_dir->ang_h = 0.0;
+$effect->add_ball(new Ball(new Vect(5.0, 0.0, 2.0), 1.0));
+$effect->add_ball(new Ball(new Vect(10.0, 0.0, 2.0), 1.0));
+$effect->add_ball(new Ball(new Vect(7.5, 0.0, 2.0), 2.0));
 
-$effect = new RaytracedBall($start_pos, $start_dir, 2, 2, $bb->x_cols, $bb->y_rows);
-#region ball b
-$b_vect = new Vect;
-$b_vect->x = 5;
-$b_vect->y = 0;
-$b_vect->z = 2;
-
-$b = new Ball;
-$b->center = &$b_vect;
-$b->radius = 2;
-
-$effect->add_ball($b);
-#endregion
-
-#region ball c
-$c_vect = new Vect;
-$c_vect->x = 10;
-$c_vect->y = 0;
-$c_vect->z = 2;
-
-$c = new Ball;
-$c->center = &$c_vect;
-$c->radius = 2;
-
-$effect->add_ball($c);
-#endregion
-
-#region ball d
-$d_vect = new Vect;
-$d_vect->x = 7.5;
-$d_vect->y = 0;
-$d_vect->z = 8;
-
-$d = new Ball;
-$d->center = &$d_vect;
-$d->radius = 4;
-
-$effect->add_ball($d);
-#endregion
 
 $engine = new Engine($bb, $effect);
 $engine->runForever();

@@ -24,5 +24,5 @@ function ray_char(Vect &$ray, int $refl): string
     } else if ($refl > 0) {
         if ($refl < 4) return $chars[$refl-1];
         else return '+';
-    } else return '';
+    } else return ' ';
 }

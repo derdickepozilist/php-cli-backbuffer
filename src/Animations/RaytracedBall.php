@@ -15,7 +15,7 @@ use function CLI\Animation\Ani3D\ray_done;
 
 class RaytracedBall implements Effect
 {
-    const int FRAME_DELAY_MS = 30;
+    const int FRAME_DELAY_MS = 1;
 
     const float MOVE_ANGLE = 0.01;
     const float MOVE_POSITION = 0.03;
@@ -26,7 +26,7 @@ class RaytracedBall implements Effect
     /**
      * @var Ball[]
      */
-    public array $balls;
+    public array $balls = [];
     public Vect $pos;
     public Direction $dir;
     public float $width;
@@ -51,7 +51,7 @@ class RaytracedBall implements Effect
         $this->yres = $yres;
     }
 
-    public function add_ball(Ball &$b): void
+    public function add_ball(Ball $b): void
     {
         $this->balls[] = $b;
     }
@@ -63,33 +63,33 @@ class RaytracedBall implements Effect
         $v1 = $this->dir->to_unit();
 
 		// v2 points from middle of the rectangle to upper edge
-        $v2 = new Vect;
-        $v2->x = -tan($this->dir->ang_v) * $v1->x;
-        $v2->y = -tan($this->dir->ang_v) * $v1->y;
-        $v2->z = cos($this->dir->ang_v);
+        $v2 = new Vect(
+            -tan($this->dir->altitude) * $v1->x,
+            -tan($this->dir->altitude) * $v1->y,
+            cos($this->dir->altitude)
+        );
 
-        $v2->scale($this->height / 2);
+        $v2->scale($this->height / 2.0);
 
 		// v3 points from middle of rectangle to left edge
-        $v3 = new Vect;
-        $v3->x = -$v1->y;
-        $v3->y = $v1->x;
-        $v3->z = 0;
+        $v3 = new Vect(
+            -$v1->y,
+            $v1->x,
+            0
+        );
 
         $v3->normalize();
-        $v3->scale($this->width/2);
+        $v3->scale($this->width / 2.0);
 
         $ballcount = count($this->balls);
         for ($row = 0; $row < $this->yres; ++$row) {
             for ($col = 0; $col < $this->xres; ++$col) {
-                $up_offset = - (floatval($row) / $this->yres -1) -0.5;
-                $left_offset = - (floatval($col) / $this->xres -1) -0.5;
+                $up_offset = -(floatval($row) / (floatval($this->yres) -1.0) -0.5);
+                $left_offset = floatval($col) / (floatval($this->xres) -1.0) -0.5;
 
-                $up_scale = $v2->scaled($up_offset);
-                $left_scale = $v3->scaled($left_offset);
                 $move = clone $v1;
-                $move->add($up_scale);
-                $move->add($left_scale);
+                $move->add($v2->scaled($up_offset));
+                $move->add($v3->scaled($left_offset));
                 $move->normalize();
                 $move->scale(self::RAYSTEP);
 
@@ -104,10 +104,10 @@ class RaytracedBall implements Effect
                     if (ray_done($ray)) break;
 
                     $ball_index = 0;
-                    foreach ($this->balls as $b) {
+                    foreach ($this->balls as &$b) {
                         $d = $ray->dist($b->center) - $b->radius;
                         $dists_to_balls[$ball_index] = $d;
-                        if ($d < 0) {
+                        if ($d < 0.0) {
                             $move = $b->reflect($ray, $move);
                             $times_reflected++;
                         }
@@ -125,10 +125,9 @@ class RaytracedBall implements Effect
 
                     if ($min_dist > self::RAYSTEP) {
                         $possible_steps = $min_dist / self::RAYSTEP;
-                        $i += $possible_steps -1;
+                        $i += $possible_steps -1; // -1 because of default increment
                         $ray->add($move->scaled($possible_steps));
-                    }
-                    else {
+                    } else {
                         $ray->add($move);
                     }
                 }
@@ -143,17 +142,17 @@ class RaytracedBall implements Effect
     {
         switch ($direction) {
             case 'up':
-                $this->dir->ang_v += self::MOVE_ANGLE;
+                $this->dir->altitude += self::MOVE_ANGLE;
                 break;
             case 'down':
-                $this->dir->ang_v -= self::MOVE_ANGLE;
+                $this->dir->altitude -= self::MOVE_ANGLE;
                 break;
             case 'left':
-                $this->dir->ang_h -= self::MOVE_ANGLE;
+                $this->dir->azimuth -= self::MOVE_ANGLE;
                 break;
             case 'right':
             default:
-                $this->dir->ang_h += self::MOVE_ANGLE;
+                $this->dir->azimuth += self::MOVE_ANGLE;
                 break;
         }
     }
@@ -175,11 +174,13 @@ class RaytracedBall implements Effect
                 $this->pos->y += $ymov;
                 break;
             case 'backward':
+            case 'back':
                 $this->pos->x -= $xmov;
                 $this->pos->y -= $ymov;
                 break;
             default:
         }
+
         switch($direction_rl) {
             case 'left':
                 $this->pos->x += $ymov;
@@ -193,22 +194,31 @@ class RaytracedBall implements Effect
         }
     }
 
-    public function check_reflections(Vect &$ray, Vect &$move): bool
-    {
-		// checks if ray has to be reflected on one of the objects, changes dir accordingly
-        foreach ($this->balls as $ball) {
-            if ($ray->dist($ball->center) < $ball->radius) {
-                $move = $ball->reflect($ray, $move);
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     public function renderNextFrame(int $frame, Backbuffer &$bb): void
     {
         $this->make_pic($bb);
-        $this->move_view('right');
+
+        /*
+        foreach ($this->balls as &$b) {
+            $b->bounce_frame();
+        }*/
+
+        //$this->move_view('right');
+        if ($frame % 5 === 0) {
+        }
+        
+        $this->move_view('up');
+        //$this->move_view('left');*/
+        //$this->move_position('back', '');
+
+        $str = '';
+        $last_line = $bb->y_rows - 2;
+        for ($i = 0; $i < $bb->x_cols - 1; $i++) $str .= ' ';
+        $bb->setPos(0, $last_line);
+        $bb->writeString($str);
+        $bb->setPos(0, $last_line);
+        $str = 'pos: ' . $this->pos->to_string() . ' dir:' . $this->dir->to_string();
+        $bb->writeString($str);
     }
 }

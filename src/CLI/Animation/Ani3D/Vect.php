@@ -6,9 +6,45 @@ namespace CLI\Animation\Ani3D;
 
 class Vect
 {
-    public float $x;
-    public float $y;
-    public float $z;
+    public function __construct(
+        public float $x = 0.0,
+        public float $y = 0.0,
+        public float $z = 0.0
+        )
+    {
+    }
+
+    public function length(): float
+    {
+        $x = &$this->x;
+        $y = &$this->y;
+        $z = &$this->z;
+
+        return sqrt($x * $x + $y * $y + $z * $z);
+    }
+
+    public function dist(Vect &$other): float
+    {
+        $x = &$this->x;
+        $y = &$this->y;
+        $z = &$this->z;
+
+        return sqrt(
+            ($x - $other->x) * ($x - $other->x) +
+                ($y - $other->y) * ($y - $other->y) +
+                ($z - $other->z) * ($z - $other->z)
+        );
+    }
+
+    public function dot(Vect &$other): float
+    {
+        $x = &$this->x;
+        $y = &$this->y;
+        $z = &$this->z;
+        return $x * $other->x +
+            $y * $other->y +
+            $z * $other->z;
+    }
 
     public function normalize(): void
     {
@@ -16,15 +52,6 @@ class Vect
         $this->x /= $len;
         $this->y /= $len;
         $this->z /= $len;
-    }
-
-    public function length(): float
-    {
-        return sqrt(
-            $this->x * $this->x +
-                $this->y * $this->y +
-                $this->z * $this->z
-        );
     }
 
     public function add(Vect $v): void
@@ -43,38 +70,23 @@ class Vect
 
     public function scaled(float $s): Vect
     {
-        $v = new Vect;
-        $v->x = $this->x * $s;
-        $v->y = $this->y * $s;
-        $v->z = $this->z * $s;
-
-        return $v;
-    }
-
-    public function dist(Vect &$other): float
-    {
-        return sqrt(
-            ($this->x - $other->x) * ($this->x - $other->x) +
-                ($this->y - $other->y) * ($this->y - $other->y) +
-                ($this->z - $other->z) * ($this->z - $other->z)
-        );
-    }
-
-    public function dot(Vect &$other): float
-    {
-        return $this->x * $other->x +
-            $this->y * $other->y +
-            $this->z * $other->z;
+        return new Vect($this->x * $s, $this->y * $s, $this->z * $s);
     }
 
     public function to_direction(): Direction
     {
-        $ang_v = atan($this->z / (($this->x * $this->x) + ($this->y * $this->y)));
-        $ang_h = atan2($this->y, $this->x);
+        $x = &$this->x;
+        $y = &$this->y;
+        $z = &$this->z;
 
-        $dir = new Direction();
-        $dir->ang_v = $ang_v;
-        $dir->ang_h = $ang_h;
-        return $dir;
+        return new Direction(
+            atan($z / ($x * $x + $y * $y)),
+            atan2($y, $x)
+        );
+    }
+
+    public function to_string(): string
+    {
+        return '[ x=' . number_format($this->x, 3) . ' y=' . number_format($this->y, 3) . ' z=' . number_format($this->z, 3) . ' ]';
     }
 }
