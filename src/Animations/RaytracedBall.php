@@ -199,16 +199,18 @@ class RaytracedBall implements Effect
     {
         $this->make_pic($bb);
 
-        /*
+
         foreach ($this->balls as &$b) {
             $b->bounce_frame();
-        }*/
+        }
 
         //$this->move_view('right');
+        /*
         if ($frame % 5 === 0) {
-        }
+            $this->move_view('up');
+            $this->move_position('back', '');
+        }*/
         
-        $this->move_view('up');
         //$this->move_view('left');*/
         //$this->move_position('back', '');
 

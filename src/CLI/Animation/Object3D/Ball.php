@@ -12,7 +12,10 @@ class Ball
     public function __construct(
         public Vect $center = new Vect(),
         public float $radius = 1.0
-    ) {}
+    ) {
+        $this->zmin = $this->center->z - $radius;
+        $this->zmax = $this->center->z + $radius;
+    }
 
     public float $updown = -1;
     public float $zmin;
@@ -35,14 +38,12 @@ class Ball
 
     public function bounce_frame(): void
     {
-        if ($this->center->z > $this->zmin && $this->center->z < $this->zmax) {
-            $this->center->z += self::BOUNCE_FRAME_STEP * $this->updown;
-        }
+        $this->center->z += self::BOUNCE_FRAME_STEP * $this->updown;
 
-        if ($this->center->z <= $this->zmin) {
-            $this->updown = 1;
-        } else if ($this->center->z >= $this->zmax) {
-            $this->updown = -1;
+        if ($this->center->z < $this->zmin) {
+            $this->updown *= -1;
+        } else if ($this->center->z > $this->zmax) {
+            $this->updown *= -1;
         }
     }
 }
