@@ -8,12 +8,12 @@ use CLI\Animation\Ani3D\Vect;
 
 class Ball
 {
-    const float BOUNCE_FRAME_STEP = 0.3;
+    const float BOUNCE_FRAME_STEP = 0.125;
     public function __construct(
         public Vect $center = new Vect(),
         public float $radius = 1.0
     ) {
-        $this->zmin = $this->center->z - $radius;
+        $this->zmin = $this->center->z - ($radius - $radius/1.3);
         $this->zmax = $this->center->z + $radius;
     }
 
