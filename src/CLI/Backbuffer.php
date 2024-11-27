@@ -28,7 +28,7 @@ class Backbuffer
 
     private static function makeInternalIdx(int $x, int $y): string
     {
-        return $y . ',' . $x;
+        return "$y,$x";
     }
 
     private function getInternalIdx(): string
@@ -67,7 +67,7 @@ class Backbuffer
         if (in_array(mb_strlen($char), [0, 1], true)) {
             $this->char_map[$this->getInternalIdx()] = $char;
         } else {
-            throw new InvalidArgumentException('char must have a length of 0 or 1');
+            throw new InvalidArgumentException('char must have a string-length of 0 or 1');
         }
     }
 
@@ -130,9 +130,11 @@ class Backbuffer
     {
         $out_string = '';
 
-        for ($y = 0; $y < $this->y_rows - 1; $y++) {
-            for ($x = 0; $x < $this->x_cols - 1; $x++) {
-                $out_string .= $this->char_map[self::makeInternalIdx(x: $x, y: $y)];
+        $y_rows = $this->y_rows - 1;
+        $x_cols = $this->x_cols - 1;
+        for ($y = 0; $y < $y_rows; $y++) {
+            for ($x = 0; $x < $x_cols; $x++) {
+                $out_string .= $this->char_map["$y,$x"];
             }
 
             $out_string .=  PHP_EOL;
